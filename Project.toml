@@ -1,0 +1,4 @@
+name = "RobustMDPs"
+uuid = "74c908e1-de81-459c-8fea-3c7fe559e5e4"
+authors = ["Marek Petrik <mpetrik@cs.unh.edu>"]
+version = "0.1.0"
