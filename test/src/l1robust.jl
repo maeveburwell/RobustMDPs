@@ -14,7 +14,7 @@
     #println("Optimal p: ", popt)
     #println("Objective value: ", obj)
 
-    @test obj ≤ z' * p̄
+    @test obj ≤ z' * p̄d
     @test obj ≥ minimum(z)
 end
 
