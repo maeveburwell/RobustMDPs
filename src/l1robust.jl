@@ -23,7 +23,6 @@ Optimal solution `p` and the objective value
 """
 using LinearAlgebra
 using DataStructures
-using Printf
 using Infinity
 function worstcase_l1(z::Vector{Float64}, p̄::Vector{Float64}, ξ::Float64)
     (maximum(p̄) <= 1 + 1e-9 && minimum(p̄) >= -1e-9)  || "values must be between 0 and 1"
