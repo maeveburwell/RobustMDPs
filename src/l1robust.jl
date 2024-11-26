@@ -126,15 +126,14 @@ function steepest_solution(gradients::GradientsL1_w, index::Int)
     return gradients.grads[e], gradients.donors[e], gradients.receivers[e], gradients.donor_greater[e]
 end
 
-function worstcase_l1_w(z::Vector{Float64}, pbar::Vector{Float64}, w::Vector{Float64}, xi::Float64)
-    @assert maximum(pbar) <= 1 + 1e-9 && minimum(pbar) >= -1e-9 "values must be between 0 and 1"
-    @assert xi >= 0 "xi must be nonnegative"
-    @assert length(z) > 0 && length(z) == length(pbar) "z's values needs to be same length as pbar's values"
-    @assert sum(pbar) == 1 "Values of pbar must sum to one"
+function worstcase_l1_w(z::Vector{Float64}, p̄::Vector{Float64}, w::Vector{Float64}, ξ::Float64)
+    @assert maximum(p̄) <= 1 + 1e-9 && minimum(p̄) >= -1e-9 "values must be between 0 and 1"
+    @assert ξ >= 0 "ξ must be nonnegative"
+    @assert length(z) > 0 && length(z) == length(p̄) "z's values needs to be same length as p̄'s values"
+    @assert isapprox(sum(p̄), 1, atol=1e-5) "Values of p̄ must sum to one"
 
-    epsilon = 1e-10
-    p = copy(pbar)
-    xi_rest = xi
+    ϵ = 1e-10
+    xi_rest = ξ
     grad_epsilon = 1e-5
     grad_que = [] #tuple
 
@@ -153,26 +152,25 @@ function worstcase_l1_w(z::Vector{Float64}, pbar::Vector{Float64}, w::Vector{Flo
 
             if receiver == 0 continue end
 
-            if donor_greater && pbar[donor] <= pbar[donor] + epsilon continue end
+            if donor_greater && p̄[donor] <= p̄[donor] + ϵ continue end
 
-            if !donor_greater && pbar[donor] > pbar[donor] + epsilon continue end
+            if !donor_greater && p̄[donor] > p̄[donor] + ϵ continue end
 
-            if pbar[donor] < epsilon continue end
+            if p̄[donor] < ϵ continue end
 
             weight_change = donor_greater ? (-w[donor] + w[receiver]) : (w[donor] + w[receiver])
             @assert weight_change > 0
 
             donor_step = min(xi_rest / weight_change, 
-                             pbar[donor] > pbar[donor] + epsilon ? (pbar[donor] - pbar[donor]) : pbar[donor])
-            pbar[donor] -= donor_step
-            pbar[receiver] += donor_step
+                             p̄[donor] > p̄[donor] + ϵ ? (p̄[donor] - p̄[donor]) : p̄[donor])
+            p̄[donor] -= donor_step
+            p̄[receiver] += donor_step
             xi_rest -= donor_step * weight_change
 
-            if xi_rest < epsilon break end
+            if xi_rest < ϵ break end
         end
-        if xi_rest < epsilon break end
+        if xi_rest < ϵ break end
     end
 
-    objective = dot(pbar, z)
-    return (pbar, objective)
+    return (p̄, dot(p̄, z))
 end
