@@ -2,3 +2,13 @@ name = "RobustMDPs"
 uuid = "74c908e1-de81-459c-8fea-3c7fe559e5e4"
 authors = ["Marek Petrik <mpetrik@cs.unh.edu>"]
 version = "0.1.0"
+
+[deps]
+DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
+Infinity = "a303e19e-6eb4-11e9-3b09-cd9505f79100"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+
+[compat]
+DataStructures = "0.18.20"
+Infinity = "0.2.4"
+LinearAlgebra = "1.11.0"
